@@ -92,7 +92,7 @@ def metrics_df(test, predictions, model='Neural Network'):
     metrics_df = pd.DataFrame(mtrsc, index=['MAE', 'MBE', 'MSE', 'RMSE', 'cvRMSE', 'NMBE'])
     return metrics_df
 
-app = dash.Dash(__name__, external_stylesheets=external_stylesheets, suppress_callback_exceptions=True)
+app = dash.Dash(__name__, external_stylesheets=external_stylesheets, suppress_callback_exceptions=True, assets_folder='assets')
 server = app.server
 
 app.layout = html.Div([
@@ -114,15 +114,21 @@ app.layout = html.Div([
 def render_content(tab):
     if tab == 'tab-home':
         return html.Div([
-            html.H3('Welcome to the IST Civil Building Energy Consumption Dashboard'),
-            html.P('This dashboard provides insights into the energy consumption of the IST Civil Building. '
-                   'You can explore the training data, forecast data, and model predictions. '
-                   'Use the tabs above to navigate through different sections of the dashboard.'),
-            html.P('In the "Training Data" tab, you can view and analyze the historical energy consumption data for 2017 and 2018.'),
-            html.P('In the "Forecast Data" tab, you can view the forecasted energy consumption data for 2019.'),
-            html.P('In the "Forecast Model" tab, you can view the predictions made by the model.'),
-            html.P('In the "Forecast Tools" tab, you can select features and train models to predict energy consumption.')
-        ])
+            html.Div([
+                html.H3('Welcome to the IST Civil Building Energy Consumption Dashboard'),
+                html.P('This dashboard provides insights into the energy consumption of the IST Civil Building. '
+                       'You can explore the training data, forecast data, and model predictions. '
+                       'Use the tabs above to navigate through different sections of the dashboard.'),
+                html.P('In the "Training Data" tab, you can view and analyze the historical energy consumption data for 2017 and 2018.'),
+                html.P('In the "Forecast Data" tab, you can view the forecasted energy consumption data for 2019.'),
+                html.P('In the "Forecast Model" tab, you can view the predictions made by the model.'),
+                html.P('In the "Forecast Tools" tab, you can select features and train models to predict energy consumption.')
+            ], style={'width': '60%', 'display': 'inline-block'}),
+            html.Div([
+                # Placeholder for logo
+                html.Img(src='/assets/IST_A_RGB_POS.jpg', style={'height': '500px'})
+            ], style={'width': '40%', 'display': 'inline-block', 'textAlign': 'right'})
+        ], style={'display': 'flex', 'justifyContent': 'center'})
     
     elif tab == 'tab-1':
         return html.Div([
