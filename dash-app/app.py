@@ -59,7 +59,7 @@ def generate_table(dataframe, max_rows=10):
             html.Tr([html.Td(dataframe.index[i])] + [html.Td(dataframe.iloc[i][col]) for col in dataframe.columns])
             for i in range(min(len(dataframe), max_rows))
         ])
-    ])
+    ], style={'margin': 'auto'})
 
 def generate_graph(dataframe, y_col, normalize=False):
     dataframe = dataframe.drop('Hour', axis=1)
@@ -96,7 +96,7 @@ app = dash.Dash(__name__, external_stylesheets=external_stylesheets, suppress_ca
 server = app.server
 
 app.layout = html.Div([
-    dcc.Store(id='n-clicks-store', data=0),  # Add this line
+    dcc.Store(id='n-clicks-store', data=0),
     dcc.Tabs(id='tabs', value='tab-home', children=[
         dcc.Tab(label='Home', value='tab-home'),
         dcc.Tab(label='Training Data', value='tab-1'),
@@ -104,8 +104,6 @@ app.layout = html.Div([
         dcc.Tab(label='Forecast Model', value='tab-3'),
         dcc.Tab(label='Forecast Tools', value='tab-4')
     ]),
-    html.H2('IST Civil Building Energy Consumption Dashboard'),
-    html.P('Visualization of total electricity consumption'),
     html.Div(id='tabs-content')
 ])
 
@@ -115,17 +113,19 @@ def render_content(tab):
     if tab == 'tab-home':
         return html.Div([
             html.Div([
-                html.H3('Welcome to the IST Civil Building Energy Consumption Dashboard'),
+                html.H1('Welcome to the IST Civil Building Energy Consumption Dashboard!'),
                 html.P('This dashboard provides insights into the energy consumption of the IST Civil Building. '
                        'You can explore the training data, forecast data, and model predictions. '
                        'Use the tabs above to navigate through different sections of the dashboard.'),
                 html.P('In the "Training Data" tab, you can view and analyze the historical energy consumption data for 2017 and 2018.'),
                 html.P('In the "Forecast Data" tab, you can view the forecasted energy consumption data for 2019.'),
                 html.P('In the "Forecast Model" tab, you can view the predictions made by the model.'),
-                html.P('In the "Forecast Tools" tab, you can select features and train models to predict energy consumption.')
+                html.P('In the "Forecast Tools" tab, you can select features and train models to predict energy consumption.',
+                       style={'marginBottom': '20px'}),
+                html.P('This dashboard was created by Guilherme Neves.')
             ], style={'width': '60%', 'display': 'inline-block', 'justifyContent': 'center'}),
             html.Div([
-                html.Img(src='/assets/IST_A_RGB_POS.jpg', style={'height': '350px'})
+                html.Img(src='dash-app/img/IST_A_RGB_POS.jpg', style={'height': '400px'})
             ], style={'width': '40%', 'display': 'inline-block', 'textAlign': 'right'})
         ], style={'display': 'flex', 'justifyContent': 'center'})
     
@@ -171,8 +171,8 @@ def render_content(tab):
     
     elif tab == 'tab-4':
         return html.Div([
-            html.H3('IST Energy Yearly Consumption (kWh)'),
-            html.P('Select the features to predict the energy consumption'),
+            html.H3('Train your own model to predict energy consumption!'),
+            html.P('Select the features you want to use to train the model and the model type.'),
             dcc.Dropdown(
                 id='model',
                 options=[
@@ -194,7 +194,8 @@ def render_content(tab):
                     {'label': 'Hour', 'value': 'Hour'}
                     # Add customizable feature
                 ],
-                value=[]
+                value=[],
+                inline=True
             ),
             html.Button('Train Your Model', id='train-model'),
             html.Div(id='output-predict'),
@@ -242,11 +243,11 @@ def update_graph_training(selected_features):
 
 @app.callback(
     Output('output-predict', 'children'),
-    Output('n-clicks-store', 'data'),  # Add this line
+    Output('n-clicks-store', 'data'),
     Input('model', 'value'),
     Input('features-tools', 'value'),
     Input('train-model', 'n_clicks'),
-    State('n-clicks-store', 'data')  # Add this line
+    State('n-clicks-store', 'data')
 )
 def train_model(model, features, n_clicks, stored_n_clicks):
     if not features or model is None:
@@ -318,4 +319,4 @@ def update_output(value):
         return generate_table(metrics_df(Y_test, Predictions))
 
 if __name__ == '__main__':
-    app.run(debug=False)
+    app.run(debug=True)
