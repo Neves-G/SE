@@ -12,11 +12,11 @@ from sklearn.neural_network import MLPRegressor
 from sklearn.ensemble import RandomForestRegressor
 
 # Load stylesheets, data and model
-df_17_18 = pd.read_csv('dash-app/data/IST_Civil_Pav_2017_2018.csv')
-df_19 = pd.read_csv('dash-app/data/2019Test.csv')
-features_df = pd.read_csv('dash-app/data/Features.csv')
-features_19_df = pd.read_csv('dash-app/data/Features_19.csv')
-ModelNN = joblib.load('dash-app/models/NN_model.pkl')
+df_17_18 = pd.read_csv('data/IST_Civil_Pav_2017_2018.csv')
+df_19 = pd.read_csv('data/2019Test.csv')
+features_df = pd.read_csv('data/Features.csv')
+features_19_df = pd.read_csv('data/Features_19.csv')
+ModelNN = joblib.load('models/NN_model.pkl')
 
 # Rename columns
 df_17_18.rename(columns={'Date_start': 'Date','Power_kW':'Power (kW)','Hour': 'Hour',
